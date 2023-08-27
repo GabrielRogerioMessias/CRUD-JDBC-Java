@@ -3,10 +3,9 @@ package application.dao.implementation;
 import application.dao.UserDAO;
 import application.entities.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserImp implements UserDAO {
     private Connection connection;
@@ -19,7 +18,7 @@ public class UserImp implements UserDAO {
             String password = "1234";
             connection = DriverManager.getConnection(url, user, password);
             if (connection != null) {
-                System.out.println("Conexão com o banco INICIADA!");
+                System.out.println("Conexão eniciada.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,17 +64,48 @@ public class UserImp implements UserDAO {
     }
 
     @Override
-    public void findAll() {
+    public List<User> findAll() {
+        List<User> list = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            String query = "SELECT * FROM USER";
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                double balance = rs.getDouble("balance");
+                User u = new User(id, name, email, balance);
+                list.add(u);
+            }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
+
 
     @Override
-    public void update(User user) {
+    public void updateByID(User user, int id) {
+        String query = "UPDATE USER SET NAME = (?), EMAIL = (?) WHERE ID = (?) ";
+        PreparedStatement stmt;
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, user.getName());
+            stmt.setString(2, user.getEmail());
+            stmt.setInt(3, id);
+            int linhas = stmt.executeUpdate();
+            if (linhas > 0) {
+                System.out.println("Update executado com sucesso!");
+            } else {
+                System.out.println("Houve um erro com o update, verifique o usuário");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    @Override
-    public void findByParts(String parts) {
 
-    }
 }

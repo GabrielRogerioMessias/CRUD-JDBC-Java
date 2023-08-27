@@ -6,6 +6,22 @@ public class Expense {
     private double valueExpense;
     private int id_user;
 
+    public Expense() {
+    }
+
+    public Expense(int id, String description, double valueExpense, int id_user) {
+        this.id = id;
+        this.description = description;
+        this.valueExpense = valueExpense;
+        this.id_user = id_user;
+    }
+
+    public Expense(String description, double valueExpense, int id_user) {
+        this.description = description;
+        this.valueExpense = valueExpense;
+        this.id_user = id_user;
+    }
+
     private User user;
 
     public int getId() {

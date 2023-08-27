@@ -10,9 +10,13 @@ public class User {
     private double balance;
     List<Expense> expenseList = new ArrayList<>();
 
-//    public User() {
-//    } public User() {
-//    }
+    public User() {
+    }
+    public User( int id, String name, String email, double balance) {
+        this.name = name;
+        this.email = email;
+        this.balance = balance;
+    }
 
     public User( String name, String email, double balance) {
         this.name = name;
